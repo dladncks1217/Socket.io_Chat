@@ -45,3 +45,9 @@ app.use((err,req,res)=>{
     res.status(err.status||500);
     res.render('error');
 });
+
+const server = app.listen(app.get('port'),()=>{   // 여기서 listen을 server 변수에 저장한다.
+    console.log(app.get('port'),'번 포트에서 대기중');
+});
+
+webSocket(server);   //webSocket 인자값으로 listen들어가있는 server 변수를 넣어준다.(웹 소켓과 익스프레스 서버 연결.)
