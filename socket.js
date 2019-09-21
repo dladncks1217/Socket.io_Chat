@@ -10,7 +10,7 @@ module.exports = (server) =>{   // 이 express 서버를 웹 소켓 서버와 �
 
     wss.on('connection',(ws,req)=>{   //사용자 한 명이 접속하였을 때 connection     /   req를 한번 보내고 계속해서 연결하는거기 때문에 res는 없다.
         const ip = req.headers['x-forwarded-for']||req.connection.remoteAddress; // req.headers['x-forwarded-for] -> 프록시 거치기 전의 ip    req.connection.remoteAddress -> 최종 ip
-        console.log('클라이언트 접속', ip);
+        console.log('클라이언트 접속', ip); //접속 시 ip가 뜨도록.
         ws.on('message',(message)=>{   //우리가 메시지를 보냈을 때.
             console.log(message);
         });
