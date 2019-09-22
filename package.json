@@ -17,6 +17,7 @@
     "express-session": "^1.16.2",
     "morgan": "^1.9.1",
     "pug": "^2.0.4",
+    "socket.io": "^2.3.0",
     "ws": "^7.1.2"
   },
   "devDependencies": {
