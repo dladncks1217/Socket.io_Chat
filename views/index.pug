@@ -9,7 +9,7 @@ body
   script.
     //웹 소켓 스크립트 부분
     var socket = io.connect('http://localhost:8005',{
-      path: 'socket.io',      // 이 부분이 socket.js파일의 path와 같아야 연결이 되는 것이다.
+      path: '/socket.io',      // 이 부분이 socket.js파일의 path와 같아야 연결이 되는 것이다.
     });
     socket.on('news',function(data){
       console.log(data);
