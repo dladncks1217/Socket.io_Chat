@@ -31,7 +31,7 @@ block content
         button(type='submit') 전송
     script(src='/socket.io/socket.io.js')
     script.
-        var socket = io.connect('http://localhost:8005/chat', {
+        var socket = io.connect('http://localhost:8005/chat', {//   /chat 네임스페이스. 채팅에 대한 이벤트만 받는 네임스페이스. 불필요한 실시간 정보가 전달 안되도록.
             path: '/socket.io'
         });
         socket.on('join', function (data) {
