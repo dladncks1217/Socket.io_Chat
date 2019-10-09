@@ -12,6 +12,7 @@ Socket.io <br><br>
 
 ## NPM 사용목록
 
+- nodemon (소스 수정 시 자동 서버 재시작) (https://www.npmjs.com/package/nodemon)
 - cookie-parser (cookie 사용) (https://www.npmjs.com/package/cookie-parser)
 - express-session (session 사용) (https://www.npmjs.com/package/express-session)
 - connect-flash (플래시 메시지) (https://www.npmjs.com/package/connect-flash)
