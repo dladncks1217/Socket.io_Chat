@@ -10,16 +10,37 @@ module.exports = (server) =>{
     불필요한 실시간 정보가 전달 안되도록 하기 위함이다. (서버 쪽 자원과 프론트쪽 자원을 아끼기 위함.)
     */
 
-    const room = io.of('/room');
-    const chat = io.of('/chat');
+    const room = io.of('/room');  // room 네임스페이스에서는 방 목록에 관해서만 받을 것.(방 생기고 제거되고)
+    const chat = io.of('/chat');  // chat 네임스페이스에서는 채팅 올라오고 사용자 채팅방 입장/퇴장에 대해서 받을 것.
 
-    room.on('conncetion',(socket)=>{
+    room.on('connection',(socket)=>{
         console.log('room 네임스페이스에 접속.');
         socket.on('disconnect',()=>{
             console.log('room 네임스페이스 접속 해제');
         });
     });
 
+    chat.on('connection',(socket)=>{
+        console.log('chat 네임스페이스에 접속');
+        const req = socket.request;
+        const { headers:{ referer }} = req;
+        const roomId = referer                                          //  방 제목을 받아온다.
+            .split('/')[referer.split('/').length-1]                    // req.headers.referer 에 웹 주소가 들어있는데, 거기서 방 아이디를 가져온다.
+            .replace(/\?.+/,'');               //
+        // /room/askld;gjf 와 같은 형태로 접근할것이다. (/네임스페이스/아이디) 이런 형태로 roomId를 가져온다. (req.headers.referer)
+        socket.join(roomId);   // 채팅방 입장
+        // 위의 socket.join(roomId); 부분은 socket.io가 미리 만들어둔 코드. 인자(roomId)에 접속하는 코드이다. 다시말해, socket.io 가 채팅방처럼 기능할 수 있도록 미리 구현해두었다는 것이다.
+        socket.to(roomId).emit('join',{               //socket.emit은 모두에게 메시지를 보내는 것이였다.  socket.to(roomId).emit 하므로써, 그 방에만 메시지 보낸다.
+            user: 'system',
+            chat: `${req.session.color}님이 입장하셨습니다.`,
+        });
+
+
+    });
+
+
+
+    /*
     io.on('connection',(socket) => {
        const req = socket.request;
        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -41,4 +62,13 @@ module.exports = (server) =>{
             socket.emit('news','Hello Socket IO');    //'emit' 은 ws 모듈에서 send 이다. 키, 값 형태로 보낸다.
         },3000);
     });
+
+     */
 };
+
+/*
+socket.join(방 아이디)
+socket.to(방 아이디).emit()
+socket.leave(방 아이디)
+위 세 가지는 socket.io에서 이미 다 구현해놓음.
+ */
