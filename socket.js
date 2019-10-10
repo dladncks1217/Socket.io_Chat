@@ -1,4 +1,5 @@
 const SocketIO = require('socket.io');
+const axios = require('axios');
 
 module.exports = (server) =>{
     const io = SocketIO(server,{ path: '/socket.io' });
@@ -27,7 +28,7 @@ module.exports = (server) =>{
         const roomId = referer                                          //  방 제목을 받아온다.
             .split('/')[referer.split('/').length-1]                    // req.headers.referer 에 웹 주소가 들어있는데, 거기서 방 아이디를 가져온다.
             .replace(/\?.+/,'');               //
-        // /room/askld;gjf 와 같은 형태로 접근할것이다. (/네임스페이스/아이디) 이런 형태로 roomId를 가져온다. (req.headers.referer)
+        // /room/asdfasdf 와 같은 형태로 접근할것이다. (/네임스페이스/아이디) 이런 형태로 roomId를 가져온다. (req.headers.referer)
         socket.join(roomId);   // 채팅방 입장
         // 위의 socket.join(roomId); 부분은 socket.io가 미리 만들어둔 코드. 인자(roomId)에 접속하는 코드이다. 다시말해, socket.io 가 채팅방처럼 기능할 수 있도록 미리 구현해두었다는 것이다.
         socket.to(roomId).emit('join',{               //socket.emit은 모두에게 메시지를 보내는 것이였다.  socket.to(roomId).emit 하므로써, 그 방에만 메시지 보낸다.
@@ -35,10 +36,27 @@ module.exports = (server) =>{
             chat: `${req.session.color}님이 입장하셨습니다.`,
         });
 
-
+        socket.on('disconnect', ()=>{
+            console.log('네임스페이스 접속 해제');
+            socket.leave(roomId);                       // 채팅방 퇴장
+            const currentRoom = socket.adapter.rooms[roomId];
+            const userCount = currentRoom ? currentRoom.length : 0;
+            if(userCount === 0){
+                axios.delete(`http://localhost:8005/room/${roomId}`)
+                    .then(()=>{
+                        console.log('방 제거 요청 성공');
+                    })
+                    .catch((error)=>{
+                        console.error(error);
+                    });
+            }else{
+                socket.to(roomId).emit('exit',{
+                    user: 'system',
+                    chat: `${req.session.color} 님이 퇴장하셨습니다.`,
+                });
+            }
+        });
     });
-
-
 
     /*
     io.on('connection',(socket) => {
@@ -67,8 +85,8 @@ module.exports = (server) =>{
 };
 
 /*
-socket.join(방 아이디)
-socket.to(방 아이디).emit()
-socket.leave(방 아이디)
+socket.join(방 아이디)   입장
+socket.to(방 아이디).emit()   특정 방으로 메시지 전송
+socket.leave(방 아이디)     퇴장
 위 세 가지는 socket.io에서 이미 다 구현해놓음.
  */
