@@ -13,6 +13,15 @@ const connect = require('./schemas/index');
 
 const app = express();
 connect();
+const sessionMiddleware = session({   //Socket.io 에서도 사용하기 위해 변수로 빼놓음.
+    resave:false,
+    saveUninitialized:false,
+    secret:process.env.COOKIE_SECRET,
+    cookie:{
+        httpOnly:true,
+        secure: false,
+    },
+});
 
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','pug');
@@ -23,15 +32,7 @@ app.use(express.static(path.join(__dirname,'public')));
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(CookieParser(process.env.COOKIE_SECRET));
-app.use(session({
-    resave:false,
-    saveUninitialized:false,
-    secret:process.env.COOKIE_SECRET,
-    cookie:{
-        httpOnly:true,
-        secure: false,
-    },
-}));
+app.use(sessionMiddleware);
 app.use(flash());
 
 app.use((req,res,next)=>{       // 접속하는 사람들에게 고유의 색 랜덤 부여.
@@ -61,4 +62,4 @@ const server = app.listen(app.get('port'),()=>{   // 여기서 listen을 server 
     console.log(app.get('port'),'번 포트에서 대기중');
 });
 
-webSocket(server,app);   // 웹 소켓과 익스프레스 서버 연결.
+webSocket(server, app, sessionMiddleware);   // 웹 소켓 서버와 익스프레스 서버 연결.(세션도 같이 보냄)
