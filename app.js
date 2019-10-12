@@ -3,6 +3,7 @@ const path = require('path');
 const morgan = require('morgan');
 const session = require('express-session');
 const flash = require('connect-flash');
+const ColorHash = require('color-hash');   //익명채팅이라 사용자 구분힘들기 때문에 사용.(사용자 아이디 색깔로.)
 const CookieParser = require('cookie-parser');
 require('dotenv').config();
 
@@ -33,6 +34,14 @@ app.use(session({
 }));
 app.use(flash());
 
+app.use((req,res,next)=>{       // 접속하는 사람들에게 고유의 색 랜덤 부여.
+    if(!req.session.color){         // 첫 접속 때 세션에 컬러 저장 안되어있으면
+        const colorHash = new ColorHash();        // 임의로 컬러 지정
+        req.session.color = colorHash.hex(req.sessionID);      // 지정된 컬러 세션에 저장.
+    }
+    next();
+});
+
 app.use('/',indexRouter);
 
 app.use((req,res,next)=>{
@@ -52,4 +61,4 @@ const server = app.listen(app.get('port'),()=>{   // 여기서 listen을 server 
     console.log(app.get('port'),'번 포트에서 대기중');
 });
 
-webSocket(server);   //webSocket 인자값으로 listen들어가있는 server 변수를 넣어준다.(웹 소켓과 익스프레스 서버 연결.)
+webSocket(server,app);   // 웹 소켓과 익스프레스 서버 연결.
