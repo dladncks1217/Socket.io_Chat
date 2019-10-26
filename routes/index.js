@@ -40,4 +40,31 @@ router.post('room',async (req,res,next)=> {  // 실제로 post요청으로 방 �
     }
 });
 
+// 채팅방 접속 라우터
+router.get('/room/:id',async(req,res,next)=>{
+    try{
+        const room = await Room.findOne({_id:req.params.id}); // 방 접속 후 해당 방에 대한 정보를 가져온다.
+        const io = req.app.get('io');
+        if(!room){
+            req.flash('roomError','존재하지 않는 방입니다.'); // 존재하지 않는 방 접근
+            return res.redirect('/');
+        }
+        if(room.password&&room.password!=req.query.password){
+            req.flash('roomError','비밀번호가 틀렸습니다.');  // 비밀번호방 비밀번호 틀렸을때
+            return res.redirect('/');
+        }
+        const { rooms } = io.of('/chat').adapter; // socket.js 에 currentRoom에서 socket.adapter.rooms[roomId]에 현재 방 정보가 나와있다 하였다.
+
+        // 방 인원확인
+        if(rooms&&rooms[req.params.id] && room.max <= rooms[req.params.id].length){ // 여기서 rooms 에서 length 하면 현재 방에 접속중인 사람 수.
+            req.flash('roomError', '방이 가득 찼습니다.');
+            res.redirect('/');
+        }
+
+    }catch(error){
+        console.error(error);
+        next(error);
+    }
+});
+
 module.exports = router;
