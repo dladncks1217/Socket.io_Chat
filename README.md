@@ -1,5 +1,5 @@
 # Socket.io_Chat
-Socket.io와 Node.js(Express)를 이용한 실시간 gif 채팅방입니다. (S.OWL 19년 2학기 개인프로젝트)
+Socket.io와 Node.js(Express)를 이용한 실시간 gif 채팅방입니다. 
 <hr>
 
 ## 사용목록
