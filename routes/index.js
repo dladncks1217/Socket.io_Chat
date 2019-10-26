@@ -60,7 +60,12 @@ router.get('/room/:id',async(req,res,next)=>{
             req.flash('roomError', '방이 가득 찼습니다.');
             res.redirect('/');
         }
-
+        return res.render('chat',{ // 모든 조건 통과 후 렌더링
+            room,
+            title: room.title,
+            chats:[],
+            user: req.session.color, // app.js 의 colorHash 여기서 사용
+        })
     }catch(error){
         console.error(error);
         next(error);
