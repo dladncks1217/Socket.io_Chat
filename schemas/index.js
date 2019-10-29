@@ -6,7 +6,6 @@ const MONGO_URL = `mongodb://${MONGO_ID}:${MONGO_PASSWORD}@localhost:27017/admin
 
 module.exports = () =>{
     const connect = () =>{
-        mongoose.connect = ()=>{
             mongoose.connect(MONGO_URL,{
                 dbName:'gifchat',
             },(error)=>{
@@ -16,7 +15,6 @@ module.exports = () =>{
                     console.log('몽고디비 연결 성공!');
                 }
             });
-        };
     };
     connect();
 
