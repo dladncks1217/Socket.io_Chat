@@ -5,6 +5,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const ColorHash = require('color-hash');   //익명채팅이라 사용자 구분힘들기 때문에 사용.(사용자 아이디 색깔로.)
 const CookieParser = require('cookie-parser');
+const favicon = require('serve-favicon');
 require('dotenv').config();
 
 const webSocket = require('./socket');
@@ -23,10 +24,12 @@ const sessionMiddleware = session({   //Socket.io 에서도 사용하기 위해 
     },
 });
 
+
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','pug');
 app.set('port',process.env.PORT||8005);
 
+app.use(favicon(path.join(__dirname,'public','favicon.ico')));
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname,'public')));
 app.use(express.json());
