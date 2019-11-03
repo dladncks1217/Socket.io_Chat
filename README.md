@@ -9,6 +9,7 @@ PUG (Jade)<br><br>
 Node.js (Express)<br><br>
 MongoDB (Mongoose)<br><br>
 Socket.io <br><br>
+AJAX
 
 ## NPM 사용목록
 
