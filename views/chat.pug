@@ -89,5 +89,6 @@ block content
                 xhr.setRequestHeader('Content-Type','application/json');
                 xhr.send(JSON.stringify({chat:this.chat.value}));
             }
-
-        })
+            document.getElementById('chat').value='';
+            document.getElementById('chat').focus();
+        });
