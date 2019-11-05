@@ -76,7 +76,7 @@ router.get('/room/:id',async(req,res,next)=>{
 // 채팅방 삭제 라우터
 router.delete('/room/:id',async(req,res,next)=>{  // 사실 이 부분은 socket.js 에서 건드려도 되는거지만 디비건드려야하니까 라우터에다 하도록 하자.
     try{
-        await Room.remove({id:req.params.id});
+        await Room.remove({_id:req.params.id});
         await Chat.remove({room: req.params.id});
         res.send('ok');
         setTimeout(()=>{

@@ -53,6 +53,7 @@ module.exports = (server, app, sessionMiddleware) =>{
             // 방에 인원 없을 시 방을 없앤다.
             const currentRoom = socket.adapter.rooms[roomId];  // socket.adapter.rooms[방아이디]에 방 정보와 인원이 들어있다.
             const userCount = currentRoom ? currentRoom.length : 0;  // 방.length 하면 현재 사용자 수가 나온다.
+            console.log(`현재 ${userCount}명 남아있습니다.`);
             if(userCount === 0){   //방에 남아있는 사람이 없으면
                 axios.delete(`http://localhost:8005/room/${roomId}`)
                     .then(()=>{
