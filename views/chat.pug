@@ -61,18 +61,36 @@ block content
             let nows = new Date();
             let hours = nows.getHours();
             let minutes = nows.getMinutes();
+            if(hours<10){
+                hours = '0'+hours;
+            }
+            if(minutes<10){
+                minutes = '0'+minutes;
+            }
 
             let name = document.createElement('div');
             name.textContent = data.user;
             div.appendChild(name);
-            let time = document.createElement('span');
-            time.textContent = `${hours}:${minutes}  `;
-            time.classList.add('now');
-            div.appendChild(time);
+
             if(data.chat){
-                let chat = document.createElement('div');
-                chat.textContent = data.chat;
-                div.appendChild(chat);
+                if(data.user==='#{user}') {
+                    let time = document.createElement('span');
+                    time.textContent = `${hours}:${minutes}  `;
+                    time.classList.add('now');
+                    div.appendChild(time);
+                    let chat = document.createElement('div');
+                    chat.textContent = data.chat;
+                    div.appendChild(chat);
+                }else{
+                    let chat = document.createElement('span');
+                    chat.textContent = data.chat;
+                    div.appendChild(chat);
+                    chat.classList.add('chat2');
+                    let time = document.createElement('span');
+                    time.textContent = `  ${hours}:${minutes}`;
+                    time.classList.add('now');
+                    div.appendChild(time);
+                }
             }else{
                 let gif = document.createElement('img');
                 gif.src = '/gif/'+data.gif;
