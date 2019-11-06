@@ -31,3 +31,7 @@ table, table th, table td {
     border: 1px solid silver;
     border-collapse: collapse;
 }
+.now{
+    font-size:10px;
+
+}
