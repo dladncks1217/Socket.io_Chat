@@ -31,41 +31,50 @@ block content
         button(type='submit') 전송
     script(src='/socket.io/socket.io.js')
     script.
-        var socket = io.connect('http://localhost:8005/chat', {//   /chat 네임스페이스. 채팅에 대한 이벤트만 받는 네임스페이스. 불필요한 실시간 정보가 전달 안되도록.
+        let socket = io.connect('http://localhost:8005/chat', {//   /chat 네임스페이스. 채팅에 대한 이벤트만 받는 네임스페이스. 불필요한 실시간 정보가 전달 안되도록.
             path: '/socket.io'
         });
         socket.on('join', function (data) {
-            var div = document.createElement('div');
+            let div = document.createElement('div');
             div.classList.add('system');
-            var chat = document.createElement('div');
+            let chat = document.createElement('div');
             div.textContent = data.chat;
             div.appendChild(chat);
             document.querySelector('#chat-list').appendChild(div);
         });
         socket.on('exit', function (data) {
-            var div = document.createElement('div');
+            let div = document.createElement('div');
             div.classList.add('system');
-            var chat = document.createElement('div');
+            let chat = document.createElement('div');
             div.textContent = data.chat;
             div.appendChild(chat);
             document.querySelector('#chat-list').appendChild(div);
         });
         socket.on('chat',function(data){    // 실시간 채팅이 올라오는 이벤트
-            var div = document.createElement('div');
+            let div = document.createElement('div');
             if(data.user === '#{user}'){
                 div.classList.add('mine');
             }else{
                 div.classList.add('other');
             }
-            var name = document.createElement('div');
+
+            let nows = new Date();
+            let hours = nows.getHours();
+            let minutes = nows.getMinutes();
+
+            let name = document.createElement('div');
             name.textContent = data.user;
             div.appendChild(name);
+            let time = document.createElement('span');
+            time.textContent = `${hours}:${minutes}  `;
+            time.classList.add('now');
+            div.appendChild(time);
             if(data.chat){
-                var chat = document.createElement('div');
+                let chat = document.createElement('div');
                 chat.textContent = data.chat;
                 div.appendChild(chat);
             }else{
-                var gif = document.createElement('img');
+                let gif = document.createElement('img');
                 gif.src = '/gif/'+data.gif;
                 div.appendChild('gif');
             }
@@ -77,7 +86,7 @@ block content
             // 웹소켓 안쓰고 AJAX 로 HTTP 요청을 보낸다.
             e.preventDefault();
             if(e.target.chat.value){
-                var xhr = new XMLHttpRequest();
+                let xhr = new XMLHttpRequest();
                 xhr.onload = function(){
                     if(xhr.status === 200){
                         e.target.chat.value = '';
