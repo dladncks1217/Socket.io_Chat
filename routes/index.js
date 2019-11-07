@@ -10,7 +10,7 @@ router.get('/',async (req,res, next)=>{
         const rooms = await Room.find({});
         res.render('main',{
             rooms,
-            title:'GIF 채팅방',
+            title:'NUTEE 채팅방',
             error: req.flash('roomError')});
     } catch(error){
         console.error(error);
@@ -19,7 +19,7 @@ router.get('/',async (req,res, next)=>{
 });
 
 router.get('/room',(req,res)=>{
-    res.render('room.pug', {title:'GIF 채팅방 생성'});
+    res.render('room.pug', {title:'NUTEE 채팅방 생성'});
 });  // (화면에 보여지는) 채팅방 라우터
 
 router.post('/room',async (req,res,next)=> {  // 실제로 post요청으로 방 만들어주는 미들웨어
