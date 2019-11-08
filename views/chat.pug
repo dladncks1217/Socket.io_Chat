@@ -119,3 +119,17 @@ block content
             document.getElementById('chat').value='';
             document.getElementById('chat').focus();
         });
+        document.querySelector('#gif').addEventListener('change',function(e){  // 멀티파트로 업로드 할 것.(서버에서 multer로 받을예정)
+            let formData = new FormData();
+            let xhr = new XMLHttpRequest()
+            formData.append('gif',e.target.files[0]);
+            xhr.onload = function (){
+                if(xhr.status == 200){
+                    e.target.file = null;
+                }else{
+                    console.error(xhr.responseText);
+                }
+            };
+            xhr.open('POST','/room/#{room._id}/gif');
+            xhr.send(formData);
+        });
