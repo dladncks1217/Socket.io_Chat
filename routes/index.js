@@ -100,6 +100,19 @@ fs.readdir('uploads',(error)=>{
 });
 
 
+const upload = multer({
+    storage: multer.diskStorage({          // 어디에 저장을 할 것인지.
+        destination(req,file,cb){
+            cb(null,'/uploads');
+        },
+        filename(req,file,cb){
+            const ext = path.extname(file.originalname);  // 파일 명을 설정해 주어야 한다. 안해주면 막 이상하게 설정됨. file.originalname 에 원본 파일의 이름 있음. 그것의 확장자명을 따와 ext 에 저장.
+            cb(null, path.basename(file.originalname,ext)+new Date().valueOf()+ext); // 동일 이름의 파일이 올라올 수 있으므로 시간값도 넣어 이름 설정.
+        },
+    }),
+    limits:{fileSize:10*1024*1024},         // gif 파일 최대 용량은 10MB 로 설정.
+});
+
 
 
 // routes/index.js 에서 채팅 AJAX 요청 사용한 부분 구현.(POST 요청)
