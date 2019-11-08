@@ -1,4 +1,7 @@
 const express = require('express');
+const multer = require('multer');
+const path = reuqire('path');
+const fs = require('fs');
 
 const Room = require('../schemas/room');
 const Chat = require('../schemas/chat');
@@ -87,7 +90,19 @@ router.delete('/room/:id',async(req,res,next)=>{  // 사실 이 부분은 socket
         next(error);
     }
 });
-// routes/index.js 에서 AJAX 요청 사용한 부분 구현.(POST 요청)
+
+// gif 파일 업로드를 폴더에 할것인데, 폴더 없을경우 만들어주는것. (없는 폴더에 이미지 넣기 방지.)
+fs.readdir('uploads',(error)=>{
+    if(error){
+        console.error('uploads폴더가 없어 uploads폴더를 생성합니다.');
+        fs.mkdirSync('uploads');
+    }
+});
+
+
+
+
+// routes/index.js 에서 채팅 AJAX 요청 사용한 부분 구현.(POST 요청)
 router.post('/room/:id/chat',async (req,res,next)=>{
     try{
         const chat = new Chat({
