@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const path = reuqire('path');
+const path = require('path');
 const fs = require('fs');
 
 const Room = require('../schemas/room');
@@ -100,7 +100,7 @@ fs.readdir('uploads',(error)=>{
 });
 
 
-const upload = multer({
+const uploads = multer({
     storage: multer.diskStorage({          // 어디에 저장을 할 것인지.
         destination(req,file,cb){
             cb(null,'/uploads');
@@ -113,7 +113,18 @@ const upload = multer({
     limits:{fileSize:10*1024*1024},         // gif 파일 최대 용량은 10MB 로 설정.
 });
 
-
+router.post('/room/:id/gif', uploads.single('gif'),async (req,res,next)=>{
+    try{
+        const chat = new Chat({
+            room:req.params.id,
+            user:req.session.color,
+            gif:req.file.filename,
+        });
+    }catch(error){
+        console.error(error);
+        next(error);
+    }
+})
 
 // routes/index.js 에서 채팅 AJAX 요청 사용한 부분 구현.(POST 요청)
 router.post('/room/:id/chat',async (req,res,next)=>{
