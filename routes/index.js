@@ -113,18 +113,7 @@ const uploads = multer({
     limits:{fileSize:10*1024*1024},         // gif 파일 최대 용량은 10MB 로 설정.
 });
 
-router.post('/room/:id/gif', uploads.single('gif'),async (req,res,next)=>{
-    try{
-        const chat = new Chat({
-            room:req.params.id,
-            user:req.session.color,
-            gif:req.file.filename,
-        });
-    }catch(error){
-        console.error(error);
-        next(error);
-    }
-})
+
 
 // routes/index.js 에서 채팅 AJAX 요청 사용한 부분 구현.(POST 요청)
 router.post('/room/:id/chat',async (req,res,next)=>{
@@ -132,7 +121,7 @@ router.post('/room/:id/chat',async (req,res,next)=>{
         const chat = new Chat({
             room:req.params.id,
             user:req.session.color,
-            chat:req.body.chat
+            chat:req.body.chat,
         });
         await chat.save();     // 채팅 입력한 내용, 입력한사람, 입력된 방 디비에 저장.
         // io 객체 받아온 뒤, socket chat 네임스페이스로 접속한 뒤, 다시 방 아이디로 접속하고 chat 이벤트를 뿌려준다.(밑 코드)
@@ -141,7 +130,23 @@ router.post('/room/:id/chat',async (req,res,next)=>{
         console.error(error);
         next(error);
     }
-})
+});
+
+router.post('/room/:id/gif', uploads.single('gif'),async (req,res,next)=>{
+    try{
+        const chat = new Chat({
+            room:req.params.id,
+            user:req.session.color,
+            gif:req.file.filename,
+        });
+        await chat.save();
+        res.send('ok');
+        req.app.get('io').of('/chat').to(req.params.id).emit('chat',chat);   // 여기서 emit을 하면 프론트 chat.pug의 socket.on('chat',함수)으로 들어간다.
+    }catch(error){
+        console.error(error);
+        next(error);
+    }
+});
 
 
 module.exports = router;
