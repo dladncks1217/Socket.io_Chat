@@ -26,6 +26,7 @@ const sessionMiddleware = session({   //Socket.io 에서도 사용하기 위해 
 
 
 app.set('views',path.join(__dirname,'views'));
+app.use('/gif',express.static(path.join(__dirname, 'uploads')));
 app.set('view engine','pug');
 app.set('port',process.env.PORT||8005);
 
