@@ -26,13 +26,13 @@ const sessionMiddleware = session({   //Socket.io 에서도 사용하기 위해 
 
 
 app.set('views',path.join(__dirname,'views'));
-app.use('/gif',express.static(path.join(__dirname, 'uploads')));
 app.set('view engine','pug');
 app.set('port',process.env.PORT||8005);
 
 app.use(favicon(path.join(__dirname,'public','favicon.ico')));
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname,'public')));
+app.use('/gif',express.static(path.join(__dirname, 'uploads')));  // gif로 접속시 정적파일경로
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(CookieParser(process.env.COOKIE_SECRET));
