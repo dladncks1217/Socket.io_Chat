@@ -101,9 +101,9 @@ fs.readdir('uploads',(error)=>{
 
 
 const uploads = multer({
-    storage: multer.diskStorage({          // 어디에 저장을 할 것인지.
-        destination(req,file,cb){
-            cb(null,'/uploads');
+    storage: multer.diskStorage({          // 어디에 저장을 할 것인지. (서버 디스크에 저장.)
+        destination(req,file,cb){             // destination 은 파일경로 (uploads 폴더 안.)
+            cb(null,'uploads/');
         },
         filename(req,file,cb){
             const ext = path.extname(file.originalname);  // 파일 명을 설정해 주어야 한다. 안해주면 막 이상하게 설정됨. file.originalname 에 원본 파일의 이름 있음. 그것의 확장자명을 따와 ext 에 저장.
@@ -140,8 +140,8 @@ router.post('/room/:id/gif', uploads.single('gif'),async (req,res,next)=>{
             gif:req.file.filename,
         });
         await chat.save();
-        res.send('ok');
         req.app.get('io').of('/chat').to(req.params.id).emit('chat',chat);   // 여기서 emit을 하면 프론트 chat.pug의 socket.on('chat',함수)으로 들어간다.
+        res.send('ok');
     }catch(error){
         console.error(error);
         next(error);
