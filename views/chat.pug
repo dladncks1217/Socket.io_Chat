@@ -95,9 +95,25 @@ block content
                     div.appendChild(time);
                 }
             }else{
-                let gif = document.createElement('img');
-                gif.src = '/gif/'+data.gif;
-                div.appendChild(gif);
+                if (data.user === '#{user}') {
+                    let time = document.createElement('span');
+                    time.textContent = nowtime;
+                    time.classList.add('now');
+                    div.appendChild(time);
+                    let gif = document.createElement('img');
+                    gif.src = '/gif/' + data.gif;
+                    div.appendChild(gif);
+                    }else{
+                    let gif = document.createElement('img');
+                    gif.src = '/gif/' + data.gif;
+                    div.appendChild(gif);
+                    chat.classList.add('chat2');
+                    let time = document.createElement('span');
+                    time.textContent = nowtime;
+                    time.classList.add('now');
+                    div.appendChild(time);
+                }
+
             }
             div.style.color = data.user;
             document.querySelector('#chat-list').appendChild(div);
