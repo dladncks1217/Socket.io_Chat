@@ -69,7 +69,7 @@ router.get('/room/:id',async(req,res,next)=>{
             room,
             title: room.title,
             chats,
-            number: rooms && rooms[req.params.id] && rooms[req.params.id].length||0,      // io.adapter.rooms[방아이디].length 는 참여자수.
+            number: (rooms && rooms[req.params.id] && rooms[req.params.id].length + 1) ||1,      // io.adapter.rooms[방아이디].length 는 참여자수.
             user: req.session.color, // app.js 의 colorHash 여기서 사용
         })
     }catch(error){
