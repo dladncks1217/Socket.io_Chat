@@ -3,6 +3,7 @@ extends layout
 block content
     h1= title
     a#exit-btn(href='/') 방 나가기
+    #number= "참여자 수:" + number
     fieldset
         legend 채팅 내용
         #chat-list
