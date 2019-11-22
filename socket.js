@@ -45,7 +45,7 @@ module.exports = (server, app, sessionMiddleware) =>{
         socket.to(roomId).emit('join',{               //socket.emit은 모두에게 메시지를 보내는 것이였다.  socket.to(roomId).emit 하므로써, 그 방에만 메시지 보낸다.
             user: 'system',
             chat: `${req.session.color}님이 입장하셨습니다.`,
-            number: socket.adapter.rooms[roomid].length,
+            number: socket.adapter.rooms[roomId].length,
         });
 
         socket.on('disconnect', ()=>{
