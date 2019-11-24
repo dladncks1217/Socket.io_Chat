@@ -34,6 +34,10 @@ block content
         button(type='submit') 전송
     script(src='/socket.io/socket.io.js')
     script.
+        function scrollfunc(){
+            const submitchats = document.querySelector('#chat-list');
+            submitchats.scrollTop = submitchats.scrollHeight;
+        }
         let socket = io.connect('http://localhost:8005/chat', {//   /chat 네임스페이스. 채팅에 대한 이벤트만 받는 네임스페이스. 불필요한 실시간 정보가 전달 안되도록.
             path: '/socket.io'
         });
@@ -45,6 +49,7 @@ block content
             div.textContent = data.chat;
             div.appendChild(chat);
             document.querySelector('#chat-list').appendChild(div);
+            scrollfunc();
         });
         socket.on('exit', function (data) {
             document.querySelector('#number-count').textContent = data.number;
@@ -54,6 +59,7 @@ block content
             div.textContent = data.chat;
             div.appendChild(chat);
             document.querySelector('#chat-list').appendChild(div);
+            scrollfunc();
         });
         // 현재 시간 확인
 
@@ -89,6 +95,7 @@ block content
                     let chat = document.createElement('div');
                     chat.textContent = data.chat;
                     div.appendChild(chat);
+                    setTimeout(scrollfunc,0);         // 다 태그 다 만들어지기 전에 함수 실행돼서 일단 setTimeout 으로 딜레이줌
                 }else{
                     let chat = document.createElement('span');
                     chat.textContent = data.chat;
@@ -98,6 +105,7 @@ block content
                     time.textContent = nowtime;
                     time.classList.add('now');
                     div.appendChild(time);
+                    setTimeout(scrollfunc,0);
                 }
             }else{
                 if (data.user === '#{user}') {
@@ -108,7 +116,8 @@ block content
                     let gif = document.createElement('img');
                     gif.src = '/gif/' + data.gif;
                     div.appendChild(gif);
-                    }else{
+                    setTimeout(scrollfunc,0);
+                }else{
                     let gif = document.createElement('img');
                     gif.src = '/gif/' + data.gif;
                     div.appendChild(gif);
@@ -117,6 +126,7 @@ block content
                     time.textContent = nowtime;
                     time.classList.add('now');
                     div.appendChild(time);
+                    setTimeout(scrollfunc,0);
                 }
 
             }
