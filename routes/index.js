@@ -149,5 +149,29 @@ router.post('/room/:id/gif', uploads.single('gif'),async (req,res,next)=>{
     }
 });
 
+// 시스템 메시지 저장 라우터
+router.post('/room/:id/sys',async (req,res,next)=>{
+    try{
+        const chat = req.body.type === 'join'              // 요청 본문의 타입이 join(입장) 일 경우.(socket.js에서 type설정.)
+        ? `${req.session.color} 님이 입장하셨습니다.`
+        : `${req.session.color} 님이 퇴장하셨습니다.`;
+        const sys = new Chat({
+            room: req.params.id,
+            user: 'system',
+            chat,
+        });
+        await sys.save();      // 디비에 저장.
+        req.app.get('io').of('/chat').to(req.params.id).emit(req.body.type ,{             // 입장 시에는 emit.join, 퇴장 시에는 emit.exit (chat.pug 의 socket.on(join...) 부분으로 전달.)
+            user: 'system',
+            chat,
+            number: req.app.get('io').of('/chat').adapter.rooms[req.params.id].length,
+        });
+        res.send('ok');
+    }catch(error){
+        console.error(error);
+        next(error);
+    }
+});
+
 
 module.exports = router;
