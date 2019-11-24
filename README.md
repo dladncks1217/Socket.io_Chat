@@ -24,4 +24,5 @@ AJAX
 - mongoose (Mongoose ODM) (https://www.npmjs.com/package/mongoose)
 - multer (이미지 업로드용) (https://www.npmjs.com/package/multer)
 - axios (http요청) (https://www.npmjs.com/package/axios)
-- color-hash (글자에 색 넣어주기용) (https://www.npmjs.com/package/color-hash)
+- color-hash (사용자 구분용) (https://www.npmjs.com/package/color-hash)
+- cookie-signature(서명된 쿠키 사용) (https://www.npmjs.com/package/cookie-signature)
