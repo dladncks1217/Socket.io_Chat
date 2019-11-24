@@ -116,7 +116,7 @@ block content
                     let gif = document.createElement('img');
                     gif.src = '/gif/' + data.gif;
                     div.appendChild(gif);
-                    setTimeout(scrollfunc,0);
+                    setTimeout(scrollfunc,1000);
                 }else{
                     let gif = document.createElement('img');
                     gif.src = '/gif/' + data.gif;
@@ -126,7 +126,7 @@ block content
                     time.textContent = nowtime;
                     time.classList.add('now');
                     div.appendChild(time);
-                    setTimeout(scrollfunc,0);
+                    setTimeout(scrollfunc,1000);
                 }
 
             }
