@@ -7,6 +7,8 @@ room 네임스페이스는 채팅 방 목록에 관한 실시간 이벤트만 �
 */
 const SocketIO = require('socket.io');
 const axios = require('axios');
+const cookieParser = require('cookie-parser');
+const cookie = require('cookie-signature');
 
 module.exports = (server, app, sessionMiddleware) =>{
     const io = SocketIO(server,{ path: '/socket.io' });
@@ -20,6 +22,9 @@ module.exports = (server, app, sessionMiddleware) =>{
 
     // Socket.io 에서의 미들웨어 생성.
     // 아래 코드는 express 미들웨어를 Socket.io 에서 사용.
+    io.use((socket,next)=>{
+        cookieParser(process.env.COOKIE_SECRET)(socket.request, socket.request.res,next);
+    });
     io.use((socket, next)=>{  // 웹 소켓에서는 요청 응답이 없고, socket과 next인자만 존재한다.
         sessionMiddleware(socket.request, socket.request.res, next);
     });
@@ -41,12 +46,17 @@ module.exports = (server, app, sessionMiddleware) =>{
             .replace(/\?.+/,'');               //
         // /room/asdfasdf 와 같은 형태로 접근할것이다. (/네임스페이스/아이디) 이런 형태로 roomId를 가져온다. (req.headers.referer)
         socket.join(roomId);   // 채팅방 입장
-        // 위의 socket.join(roomId); 부분은 socket.io가 미리 만들어둔 코드. 인자(roomId)에 접속하는 코드이다. 다시말해, socket.io 가 채팅방처럼 기능할 수 있도록 미리 구현해두었다는 것이다.
-        socket.to(roomId).emit('join',{               //socket.emit은 모두에게 메시지를 보내는 것이였다.  socket.to(roomId).emit 하므로써, 그 방에만 메시지 보낸다.
-            user: 'system',
-            chat: `${req.session.color}님이 입장하셨습니다.`,
-            number: socket.adapter.rooms[roomId].length,
+        axios.post(`http://localhost:8005/room/${roomId}/sys`,{
+            type:'join',
+        },{
+            headers:{
+                Cookie:`connect.sid = ${'s%3A'+ cookie.sign(req.signedCookies['connect.sid'], process.env.COOKIE_SECRET)}`,  // connect.sid 는 암호화된 쿠키.
+            }
         });
+        // cookie.sign + 쿠키 내용 + 암호화 키로 암호화 쿠키를 만든다.
+        // connect.sid 는 express.session의 세션 쿠키이다. (개발자도구의 application의 connect.sid)
+        // 이거 남아있는 한 세션 계속 유지된다. 이 값 바뀌면 다른사람으로 취급된다.
+        // 서버는 항상 요청을 받았을 때 쿠키를 검사한다. 쿠키를 검사해서 만약 이 connect.sid가 같으면 같은사람으로, 다르면 다른 사람으로 인식
 
         socket.on('disconnect', ()=>{
             console.log('네임스페이스 접속 해제');
@@ -64,10 +74,13 @@ module.exports = (server, app, sessionMiddleware) =>{
                         console.error(error);
                     });
             }else{     //방에 남은 인원 있을 경우 누가 퇴장했다 메시지 보냄.(이것때문에 분기처리)
-                socket.to(roomId).emit('exit',{
-                    user: 'system',
-                    chat: `${req.session.color} 님이 퇴장하셨습니다.`,
-                });
+             axios.post(`htto://localhost:8005/room/${roomId}/sys`,{
+                 type:'exit',
+             },{
+                 headers:{
+                     Cookie: `connect.sid = ${'s%3A'+ cookie.sign(req.signedCookies['connect.sid'], process.env.COOKIE_SECRET)}`,
+                 }
+             })
             }
         });
     });
