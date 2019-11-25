@@ -6,6 +6,10 @@ block content
     #number
         | 참여자 수:
         #number-count= number
+        | &nbsp
+        span#myname
+            | 내 이름:
+            #my_name= name
     fieldset
         legend 채팅 내용
         #chat-list
@@ -43,6 +47,8 @@ block content
         });
         socket.on('join', function (data) {
             document.querySelector('#number-count').textContent = data.number;
+            document.querySelector('#my_name').textContent = data.name;
+            document.querySelector('#my_name').style.color = data.name;
             let div = document.createElement('div');
             div.classList.add('system');
             let chat = document.createElement('div');
