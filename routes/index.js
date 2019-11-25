@@ -165,6 +165,7 @@ router.post('/room/:id/sys',async (req,res,next)=>{
             user: 'system',
             chat,
             number: req.app.get('io').of('/chat').adapter.rooms[req.params.id].length,
+            name: req.session.color,
         });
         res.send('ok');
     }catch(error){
