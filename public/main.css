@@ -42,3 +42,10 @@ table, table th, table td {
     padding: 2px 5px;
     max-width: 300px;
 }
+#my_name,#myname{
+    float:right;
+    display:inline-block;
+}
+#number-count{
+    display: inline-block;
+}
