@@ -180,6 +180,16 @@ block content
             };
             xhr.open('POST','/room/#{room._id}/gif');
             xhr.send(formData);
+
+            let sendDM = function (e){
+                let id = e.target.dataset.socket;
+                let prompt = window.prompt('귓속말을 입력하세요.');
+                socket.emit('dm',{target:id,msg:prompt, from:'#{room.user}'});// socket.id는 그 사람의 소켓값이다.
+                //이걸 알면 그 사람에게 메시지 보내기 가능.(귓속말을 보낼 타겟의 id)
+            };
+
+
+            // 자동 채팅창 포커싱
             document.getElementById('chat').value = '';
             document.getElementById('chat').focus();
         });
