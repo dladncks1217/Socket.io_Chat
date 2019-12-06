@@ -190,7 +190,7 @@ block content
         let sendDM = function (e) {
             let id = e.target.dataset.socket;
             let prompt = window.prompt('귓속말을 입력하세요.');
-            socket.emit('dm', {target: id, msg: prompt, from: '#{room.user}'});// socket.id는 그 사람의 소켓값이다.
+            socket.emit('dm', {target: id, msg: prompt, from: '#{user}'});// socket.id는 그 사람의 소켓값이다.
             //이걸 알면 그 사람에게 메시지 보내기 가능.(귓속말을 보낼 타겟의 id)
         };
         // 귓속말 버튼 눌렀을때 sendDM할 수 있도록
