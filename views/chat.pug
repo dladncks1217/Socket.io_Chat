@@ -199,6 +199,6 @@ block content
         });
 
         // 서버에서 보낸 데이터 클라이언트로
-        socket.on('dm',()=>{
-            alert(`${data.from} 님에게서 귓속말이 도착했습니다. ${data.msg}`);
+        socket.on('dm',(data)=>{
+            alert(`${data.from} 님에게서 귓속말이 도착했습니다.: ${data.msg}`);
         });
