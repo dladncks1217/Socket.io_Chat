@@ -92,6 +92,14 @@ block content
             name.textContent = data.user;
             div.appendChild(name);
 
+            // 귓속말 구현
+            let dm = document.createElement('button');
+            dm.textContent = '귓속말';
+            dm.className = 'dm';
+            dm.dataset.socket = data.socket;
+            dm.addEventListener('click',sendDM);
+            name.appendChild(dm);
+
             if(data.chat){
                 if(data.user==='#{user}') {
                     let time = document.createElement('span');
