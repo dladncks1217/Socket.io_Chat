@@ -49,3 +49,11 @@ table, table th, table td {
 #number-count{
     display: inline-block;
 }
+.dm{
+    display: inline-block;
+    border: 1px solid silver;
+    background-color:white;
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-size:7px;
+}
