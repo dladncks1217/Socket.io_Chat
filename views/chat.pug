@@ -89,18 +89,19 @@ block content
                 div.classList.add('other');
             }
             let name = document.createElement('div');
-            name.textContent = data.user;
+            name.textContent = data.user+" ";
 
             name.className = 'chat-user';
 
             // 귓속말 구현
-
-            let dm = document.createElement('button');
-            dm.textContent = '귓속말';
-            dm.className = 'dm';
-            dm.dataset.socket = data.socket;
-            dm.addEventListener('click', sendDM);
-            name.appendChild(dm);
+            if(data.user !== '#{user}') { // #{user}은 pug 에서 문자열사이에 변수넣는방법임.
+                let dm = document.createElement('button');
+                dm.textContent = '귓속말';
+                dm.className = 'dm';
+                dm.dataset.socket = data.socket;
+                dm.addEventListener('click', sendDM);
+                name.appendChild(dm);
+            }
             div.appendChild(name);
             if(data.chat){
                 if(data.user==='#{user}') {
