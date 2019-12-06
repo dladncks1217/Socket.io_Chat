@@ -90,16 +90,18 @@ block content
             }
             let name = document.createElement('div');
             name.textContent = data.user;
-            div.appendChild(name);
+
+            name.className = 'chat-user';
 
             // 귓속말 구현
+
             let dm = document.createElement('button');
             dm.textContent = '귓속말';
             dm.className = 'dm';
             dm.dataset.socket = data.socket;
-            dm.addEventListener('click',sendDM);
+            dm.addEventListener('click', sendDM);
             name.appendChild(dm);
-
+            div.appendChild(name);
             if(data.chat){
                 if(data.user==='#{user}') {
                     let time = document.createElement('span');
@@ -181,15 +183,13 @@ block content
             xhr.open('POST','/room/#{room._id}/gif');
             xhr.send(formData);
 
-            let sendDM = function (e){
-                let id = e.target.dataset.socket;
-                let prompt = window.prompt('귓속말을 입력하세요.');
-                socket.emit('dm',{target:id,msg:prompt, from:'#{room.user}'});// socket.id는 그 사람의 소켓값이다.
-                //이걸 알면 그 사람에게 메시지 보내기 가능.(귓속말을 보낼 타겟의 id)
-            };
-
-
             // 자동 채팅창 포커싱
             document.getElementById('chat').value = '';
             document.getElementById('chat').focus();
         });
+        let sendDM = function (e) {
+            let id = e.target.dataset.socket;
+            let prompt = window.prompt('귓속말을 입력하세요.');
+            socket.emit('dm', {target: id, msg: prompt, from: '#{room.user}'});// socket.id는 그 사람의 소켓값이다.
+            //이걸 알면 그 사람에게 메시지 보내기 가능.(귓속말을 보낼 타겟의 id)
+        };
