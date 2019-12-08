@@ -17,8 +17,8 @@ block content
                 if chat.user === user
                     .mine(style='color:' + chat.user)
                         div= chat.user
-
                         if chat.gif
+                            span.now= chat.createdAt
                             img(src='/gif/' + chat.gif)
                         else
                             span.now= chat.createdAt
@@ -29,9 +29,9 @@ block content
                 else
                     .other(style='color:' + chat.user)
                         div= chat.user
-                            button.dm= '귓속말'
                         if chat.gif
                             img(src='/gif/' + chat.gif)
+                            span.now= chat.createdAt
                         else
                             .loadmine= chat.chat
                             span.now= chat.createdAt
@@ -177,8 +177,9 @@ block content
         });
         document.querySelector('#gif').addEventListener('change',function(e){  // 멀티파트로 업로드 할 것.(서버에서 multer로 받을예정)
             let formData = new FormData();
-            let xhr = new XMLHttpRequest()
+            const xhr = new XMLHttpRequest();
             formData.append('gif',e.target.files[0]);
+            formData.append('createdAt',checktime());
             xhr.onload = function (){
                 if(xhr.status == 200){
                     e.target.file = null;
@@ -187,9 +188,8 @@ block content
                 }
             };
             xhr.open('POST','/room/#{room._id}/gif');
-            console.log(formData);
+            console.log(checktime());
             xhr.send(formData);
-
             // 자동 채팅창 포커싱
             document.getElementById('chat').value = '';
             document.getElementById('chat').focus();
