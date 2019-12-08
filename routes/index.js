@@ -144,9 +144,9 @@ router.post('/room/:id/gif', uploads.single('gif'),async (req,res,next)=>{
         const chat = new Chat({
             room:req.params.id,
             user:req.session.color,
-            chat:req.body.chat,
-            createdAt:req.body.createdAt,
+            gif:req.file.filename,
             socket:req.body.sid,
+            createdAt:req.body.createdAt,
         });
         await chat.save();
         req.app.get('io').of('/chat').to(req.params.id).emit('chat',chat);   // 여기서 emit을 하면 프론트 chat.pug의 socket.on('chat',함수)으로 들어간다.
