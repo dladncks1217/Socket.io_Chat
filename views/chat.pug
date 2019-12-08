@@ -17,10 +17,12 @@ block content
                 if chat.user === user
                     .mine(style='color:' + chat.user)
                         div= chat.user
+
                         if chat.gif
                             img(src='/gif/' + chat.gif)
                         else
-                            div= chat.chat
+                            span.now= chat.createdAt
+                            .loadmine= chat.chat
                 else if chat.user === 'system'
                     .system
                         div= chat.chat
@@ -30,7 +32,8 @@ block content
                         if chat.gif
                             img(src='/gif/' + chat.gif)
                         else
-                            div= chat.chat
+                            .loadmine= chat.chat
+                            span.now= chat.createdAt
     form#chat-form(action='/chat' method='post' enctype='multipart/form-data')
         label(for='gif') GIF 올리기
         input#gif(type='file' name='gif' accept='image/gif')
@@ -166,7 +169,7 @@ block content
                 };
                 xhr.open('POST','/room/#{room._id}/chat');
                 xhr.setRequestHeader('Content-Type','application/json');
-                xhr.send(JSON.stringify({chat:this.chat.value, sid: socket.id}));  //귓속말 보내기 위해 socket.id도 같이 보냄.
+                xhr.send(JSON.stringify({chat:this.chat.value, sid: socket.id, createdAt:checktime()}));  //귓속말 보내기 위해 socket.id도 같이 보냄.
             }
             document.getElementById('chat').value='';
             document.getElementById('chat').focus();
