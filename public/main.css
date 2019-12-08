@@ -57,3 +57,10 @@ table, table th, table td {
     padding: 2px 5px;
     font-size:7px;
 }
+.loadmine{
+    display: inline-block;
+    border: 1px solid silver;
+    border-radius: 5px;
+    padding: 2px 5px;
+    max-width: 300px;
+}
