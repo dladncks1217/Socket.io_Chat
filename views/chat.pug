@@ -182,6 +182,7 @@ block content
                 }
             };
             xhr.open('POST','/room/#{room._id}/gif');
+            console.log(formData);
             xhr.send(formData);
 
             // 자동 채팅창 포커싱
