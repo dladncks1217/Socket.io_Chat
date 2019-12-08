@@ -26,4 +26,3 @@ AJAX
 - axios (http요청) (https://www.npmjs.com/package/axios)
 - color-hash (사용자 구분용) (https://www.npmjs.com/package/color-hash)
 - cookie-signature(서명된 쿠키 사용) (https://www.npmjs.com/package/cookie-signature)
-- moment-timezone(MongoDB createdAt default value 변경(UTC)) (https://www.npmjs.com/package/moment-timezone)
