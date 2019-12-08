@@ -29,6 +29,7 @@ block content
                 else
                     .other(style='color:' + chat.user)
                         div= chat.user
+                            button.dm= '귓속말'
                         if chat.gif
                             img(src='/gif/' + chat.gif)
                         else
