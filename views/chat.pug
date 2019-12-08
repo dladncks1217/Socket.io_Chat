@@ -68,7 +68,7 @@ block content
             scrollfunc();
         });
         // 현재 시간 확인
-
+        let checktime = () => {
             const now = new Date();
             let hour = now.getHours();
             let minutes = now.getMinutes();
@@ -78,10 +78,11 @@ block content
             if (minutes < 10) {
                 minutes = `0${minutes}`
             }
-            const nowtime = ` ${hour}:${minutes} `;
-
+            return ` ${hour}:${minutes} `;
+        };
 
         socket.on('chat',function(data){    // 실시간 채팅이 올라오는 이벤트
+            let nowtime = checktime();
             let div = document.createElement('div');
             if(data.user === '#{user}'){
                 div.classList.add('mine');
