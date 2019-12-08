@@ -144,14 +144,10 @@ router.post('/room/:id/gif', uploads.single('gif'),async (req,res,next)=>{
             room:req.params.id,
             user:req.session.color,
             gif:req.file.filename,
+            socket:req.body.sid,
         });
         await chat.save();
-        req.app.get('io').of('/chat').to(req.params.id).emit('chat',{
-            socket:req.body.sid,
-            room:req.params.id,
-            user:req.session.color,
-            chat:req.body.chat,
-        });   // 여기서 emit을 하면 프론트 chat.pug의 socket.on('chat',함수)으로 들어간다.
+        req.app.get('io').of('/chat').to(req.params.id).emit('chat',chat);   // 여기서 emit을 하면 프론트 chat.pug의 socket.on('chat',함수)으로 들어간다.
         res.send('ok');
     }catch(error){
         console.error(error);
