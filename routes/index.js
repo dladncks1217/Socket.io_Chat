@@ -123,6 +123,7 @@ router.post('/room/:id/chat',async (req,res,next)=>{
             room:req.params.id,
             user:req.session.color,
             chat:req.body.chat,
+            createdAt:req.body.createdAt,
         });
         await chat.save();     // 채팅 입력한 내용, 입력한사람, 입력된 방 디비에 저장.
         // io 객체 받아온 뒤, socket chat 네임스페이스로 접속한 뒤, 다시 방 아이디로 접속하고 chat 이벤트를 뿌려준다.(밑 코드)
@@ -143,7 +144,8 @@ router.post('/room/:id/gif', uploads.single('gif'),async (req,res,next)=>{
         const chat = new Chat({
             room:req.params.id,
             user:req.session.color,
-            gif:req.file.filename,
+            chat:req.body.chat,
+            createdAt:req.body.createdAt,
             socket:req.body.sid,
         });
         await chat.save();
