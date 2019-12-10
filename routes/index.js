@@ -14,7 +14,8 @@ router.get('/',async (req,res, next)=>{
         res.render('main',{
             rooms,
             title:'NUTEE 채팅방',
-            error: req.flash('roomError')});
+            error: req.flash('roomError'),
+            name:req.session.color});
     } catch(error){
         console.error(error);
         next(error);
