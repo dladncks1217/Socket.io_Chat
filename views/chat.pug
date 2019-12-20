@@ -106,7 +106,8 @@ block content
                 name.appendChild(dm);
             }
             // 강퇴버튼
-            if(data.user !== '#{user}') {
+            const roomowner = document.getElementById('room-owner').textContent;
+            if(data.user !== '#{user}'&&roomowner!=data.user) {
                 let banBtn = document.createElement('button');
                 banBtn.className = 'ban';
                 banBtn.textContent = '강퇴';
