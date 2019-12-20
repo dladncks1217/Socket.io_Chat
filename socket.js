@@ -84,11 +84,18 @@ module.exports = (server, app, sessionMiddleware) =>{
             }
         });
         socket.on('dm',(data)=>{
+            console.log('귓속말 전달됨',data);
             socket.to(data.target).emit('dm',data);
         });
+
+        socket.on('ban',(data)=>{
+            socket.to(data.id).emit('ban');
+        });
+        // 웹소켓은 휘발성이 강하다.
+        // 바로바로 가긴 하는데 저장하고 처리하고 하는거는 직접 다 구현해야 하는 약점이 있다.
+        // 그런건 라우터 한번 거쳐서 처리하는게 좋을듯
     });
 };
-
 /*
 socket.join(방 아이디)   입장
 socket.to(방 아이디).emit()   특정 방으로 메시지 전송
