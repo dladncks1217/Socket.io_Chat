@@ -62,6 +62,10 @@ module.exports = (server, app, sessionMiddleware) =>{
             console.log('네임스페이스 접속 해제');
             socket.leave(roomId);                       // 채팅방 퇴장
             // 방에 인원 없을 시 방을 없앤다.
+
+            // 방장이 나간경우 방 인원중 랜덤으로 한 명 골라서 방장 위임
+            // 몽고디비로 room 스키마 owner update 할 예정
+
             const currentRoom = socket.adapter.rooms[roomId];  // socket.adapter.rooms[방아이디]에 방 정보와 인원이 들어있다.
             const userCount = currentRoom ? currentRoom.length : 0;  // 방.length 하면 현재 사용자 수가 나온다.
             console.log(`현재 ${userCount}명 남아있습니다.`);

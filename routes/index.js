@@ -65,6 +65,7 @@ router.get('/room/:id',async(req,res,next)=>{
             req.flash('roomError', '방이 가득 찼습니다.');
             res.redirect('/');
         }
+        // 벤당한 유저인지 확인하는 것도 추가할것.
         const chats = await Chat.find({room:room._id}).sort('createdAt');  // 방에 입장 시 예전 채팅 내용 렌더링 해줄 수 있도록 함.
         return res.render('chat',{ // 모든 조건 통과 후 렌더링
             room,
@@ -182,6 +183,6 @@ router.post('/room/:id/sys',async (req,res,next)=>{
         next(error);
     }
 });
-
+    // router ban 이런거 만들고 디비에 저장하도록 하나 만들계획
 
 module.exports = router;
