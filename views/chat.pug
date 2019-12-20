@@ -51,8 +51,6 @@ block content
         });
         socket.on('join', function (data) {
             document.querySelector('#number-count').textContent = data.number;
-            document.querySelector('#my_name').textContent = data.name;
-            document.querySelector('#my_name').style.color = data.name;
             let div = document.createElement('div');
             div.classList.add('system');
             let chat = document.createElement('div');
@@ -108,12 +106,14 @@ block content
                 name.appendChild(dm);
             }
             // 강퇴버튼
-            let banBtn = document.createElement('button');
-            banBtn.className = 'ban';
-            banBtn.textContent = '강퇴';
-            banBtn.dataset.socket = data.socket;
-            banBtn.addEventListener('click',ban);
-            name.appendChild(ban);
+            if(data.user !== '#{user}') {
+                let banBtn = document.createElement('button');
+                banBtn.className = 'ban';
+                banBtn.textContent = '강퇴';
+                banBtn.dataset.socket = data.socket;
+                banBtn.addEventListener('click', ban);
+                name.appendChild(banBtn);
+            }
 
             div.appendChild(name);
             if(data.chat){
