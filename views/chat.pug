@@ -6,10 +6,10 @@ block content
     #number
         | 참여자 수:
         #number-count= number
+    #owner
+        | 방장:
+        span#room-owner(style='color:'+ room.owner)= room.owner
         | &nbsp
-        span#myname
-            | 내 이름:
-            #my_name= name
     fieldset
         legend 채팅 내용
         #chat-list
