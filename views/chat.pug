@@ -107,6 +107,14 @@ block content
                 dm.addEventListener('click', sendDM);
                 name.appendChild(dm);
             }
+            // 강퇴버튼
+            let banBtn = document.createElement('button');
+            banBtn.className = 'ban';
+            banBtn.textContent = '강퇴';
+            banBtn.dataset.socket = data.socket;
+            banBtn.addEventListener('click',ban);
+            name.appendChild(ban);
+
             div.appendChild(name);
             if(data.chat){
                 if(data.user==='#{user}') {
@@ -208,4 +216,23 @@ block content
         // 서버에서 보낸 데이터 클라이언트로
         socket.on('dm',(data)=>{
             alert(`${data.from} 님에게서 귓속말이 도착했습니다.: ${data.msg}`);
+        });
+
+        function ban(e){
+            let id = e.target.dataset.socket;
+            let name = e.target.textContent;
+            let owner = document.getElementById('room-owner').textContent;
+            console.log('#{user}',owner);
+            if('#{user}'===owner&&name!==owner){
+                if(confirm(`${name} 님을 강퇴하시겠습니까?`)){
+                    socket.emit('ban',{id});
+                }
+            }
+        }
+        Array.prototype.forEach.call(document.querySelectorAll('ban'),(el)=>{
+            el.addEventListener('click',ban);
+        });
+        socket.on('ban',()=>{
+            alert('방장에 의해 강퇴되었습니다.');
+            location.href = '/';
         });
